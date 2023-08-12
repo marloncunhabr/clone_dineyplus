@@ -1,8 +1,23 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const buttons = document.querySelectorAll('[data-tab-button]');
-    
+    const questions = document.querySelectorAll('[data-faq-question]');
+
+    const heroSection = document.querySelector('.hero');
+    const alturaHero = heroSection.clientHeight;
+
+    window.addEventListener('scroll', function () {
+        const posicaoAtual = window.scrollY;
+
+        if (posicaoAtual < alturaHero) {
+            ocultaElementosDoHeader();
+        } else {
+            exibeElementosDoHeader();
+        }
+    })
+
+    // Seção de atraçoes, programação das abas
     for (const button of buttons) {
-        button.addEventListener('click', function(event) {
+        button.addEventListener('click', function (event) {
             const abaAlvo = event.target.dataset.tabButton;
             const aba = document.querySelector(`[data-tab-id="${abaAlvo}"]`);
             escondeTodasAbas();
@@ -11,7 +26,31 @@ document.addEventListener('DOMContentLoaded', function() {
             event.target.classList.add('shows__tabs__button--is-active');
         });
     }
-});
+
+    // Seção FAQ, accordion
+    for (let i = 0; i < questions.length; i++) {
+        questions[i].addEventListener('click', abreOuFechResposta);
+    }
+})
+
+
+function ocultaElementosDoHeader() {
+    const header = document.querySelector('header');
+    header.classList.add('header--is-hidden');
+}
+
+function exibeElementosDoHeader() {
+    const header = document.querySelector('header');
+    header.classList.remove('header--is-hidden');
+}
+
+
+function abreOuFechResposta(elemento) {
+    const classe = 'faq__questions__item--is-open';
+    const elementoPai = elemento.target.parentNode;
+
+    elementoPai.classList.toggle(classe);
+}
 
 function removeBotaoAtivo() {
     const buttons = document.querySelectorAll('[data-tab-button]');
